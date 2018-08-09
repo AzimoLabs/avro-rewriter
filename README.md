@@ -39,12 +39,8 @@ java -jar build/libs/avro-rewriter-*.jar --runner=DataflowRunner \
                    
 **Other configuration parameters:**
 * runner - runner for apache beam
-* windowInMinutes - defines how often you want to flush windowed data into files (default 60 minutes)
 * jobName - Dataflow job name
-* consumerGroupId - kafka consumer group id
-* offsetReset - kafka offset reset property
-* enableAutoCommit - kafka auto commit configuration
-* numberOfShards - defines how many files per window duration will be created for one type of data (one topic)
+* numberOfShards - defines how many files will be created after transformation
 * tempLocation - temp directory for Dataflow job on google cloud storage
 * stagingLocation - staging directory for Dataflow job on google cloud storage 
 
