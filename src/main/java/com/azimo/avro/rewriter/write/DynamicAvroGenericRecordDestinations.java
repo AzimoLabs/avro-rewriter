@@ -79,7 +79,7 @@ public class DynamicAvroGenericRecordDestinations extends DynamicAvroDestination
                     String.format(
                             "%s-%s-%s-of-%s-pane-%s%s%s",
                             filenamePrefix,
-                            window,
+                            System.nanoTime(),
                             shardNumber,
                             numShards - 1,
                             paneInfo.getIndex(),
@@ -111,7 +111,25 @@ public class DynamicAvroGenericRecordDestinations extends DynamicAvroDestination
         @Override
         public ResourceId unwindowedFilename(
                 int shardNumber, int numShards, FileBasedSink.OutputFileHints outputFileHints) {
-            throw new UnsupportedOperationException("Expecting windowed outputs only");
+            String filenamePrefix =
+                    outputFilePrefix.isDirectory() ? "" : firstNonNull(outputFilePrefix.getFilename(), "");
+            String filename =
+                    String.format(
+                            "%s-%s-%s-of-%s-pane-%s%s",
+                            filenamePrefix,
+                            System.nanoTime(),
+                            shardNumber,
+                            numShards - 1,
+                            "-final",
+                            fileExtension);
+
+            String subDir = getTodaysSubDir();
+
+            ResourceId result = outputFilePrefix.getCurrentDirectory();
+
+            if (subDir != null)
+                result = result.resolve(subDir, RESOLVE_DIRECTORY);
+            return result.resolve(filename, RESOLVE_FILE);
         }
 
         @Override
