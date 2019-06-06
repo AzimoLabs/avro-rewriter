@@ -36,7 +36,9 @@ public class WindowedFilenamePolicyTest {
         ResourceId resourceId = policy.windowedFilename(1, 3, window, paneInfo, fileHints);
 
         //then
-        String expectedResource = String.format("target/output/%s/2017-10-09/events-%s-1-of-2-pane-0.avro", type, window);
-        assertThat(resourceId.toString()).endsWith(expectedResource);
+        String expectedResourcePrefix = String.format("target/output/%s/2017-10-09/events-", type);
+        String expectedResourceSuffix = "-1-of-2-pane-0.avro";
+        assertThat(resourceId.toString()).contains(expectedResourcePrefix);
+        assertThat(resourceId.toString()).endsWith(expectedResourceSuffix);
     }
 }
